@@ -18,8 +18,8 @@ BAIDU_HOT_SEARCH_URL = "https://top.baidu.com/board?tab=realtime"
 
 if __name__ == '__main__':
     print(__file__)
-    nowstr = datetime.now().strftime("%Y%m%d%H%M%S")
-    fname = os.getcwd() + '/../../' + nowstr + '.json'
+    nowstr = datetime.now().strftime("%Y%m%d_%H%M%S")
+    fname = os.getcwd() + '/../../data/baidu_hot_search/' + nowstr + '.json'
     html = baiduHotSearch.download_html(BAIDU_HOT_SEARCH_URL)
     json_dict = baiduHotSearch.parse_html(html)
 
