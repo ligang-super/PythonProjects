@@ -15,11 +15,12 @@ from datetime import datetime
 from service.HotSearch import baiduHotSearch
 
 BAIDU_HOT_SEARCH_URL = "https://top.baidu.com/board?tab=realtime"
+BAIDU_HOT_SEARCH_DATA_DIRECTORY = "/home/ligang/data/baidu_hot_search/"
 
 if __name__ == '__main__':
     print(__file__)
     nowstr = datetime.now().strftime("%Y%m%d_%H%M%S")
-    fname = os.getcwd() + '/../../data/baidu_hot_search/' + nowstr + '.json'
+    fname = BAIDU_HOT_SEARCH_DATA_DIRECTORY + nowstr + '.json'
     html = baiduHotSearch.download_html(BAIDU_HOT_SEARCH_URL)
     json_dict = baiduHotSearch.parse_html(html)
 
