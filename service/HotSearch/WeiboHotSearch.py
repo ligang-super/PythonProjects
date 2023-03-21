@@ -39,7 +39,7 @@ Apache=2406137559614.796.1679297740246; ULV=1679297740258:2:2:1:2406137559614.79
             new_cookie = req.headers.get("Set-Cookie", "")
             if not new_cookie:
                 new_cookie = req.headers.get("set-cookie", "")
-            if new_cookie:
+            if new_cookie and cookies_dir != "./":
                 with open(cookie_file, "w") as fw:
                     fw.write(new_cookie)
             html = req.text

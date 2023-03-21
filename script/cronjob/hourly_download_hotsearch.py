@@ -43,7 +43,7 @@ def downloadWeiboHot():
 
     # 下载热搜榜
     fname_hotsearch = WEIBO_HOT_SEARCH_DATA_DIRECTORY + nowstr + '.json'
-    html_hotsearch = WeiboHotSearch.download_html(WEIBO_HOT_SEARCH_URL, cookies_dir=COOKIES_DIRECTORY)
+    html_hotsearch = WeiboHotSearch.download_html(WEIBO_HOT_SEARCH_URL)
     json_dict = WeiboHotSearch.parse_html(html_hotsearch)
 
     with open(fname_hotsearch, "w") as f:
@@ -57,8 +57,8 @@ def downloadWeiboHot():
         "game": WEIBO_GAME_URL
     }
 
-    for down_url, category in url_dict.items():
-        fname = BAIDU_HOT_SEARCH_DATA_DIRECTORY + nowstr + "_" + "category" + '.html'
+    for category, down_url in url_dict.items():
+        fname = WEIBO_HOT_SEARCH_DATA_DIRECTORY + nowstr + "_" + category + '.html'
         html = WeiboHotSearch.download_html(down_url, cookies_dir=COOKIES_DIRECTORY)
 
         with open(fname, "w") as f:
