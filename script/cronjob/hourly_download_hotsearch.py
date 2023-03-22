@@ -19,6 +19,7 @@ BAIDU_HOT_SEARCH_URL = "https://top.baidu.com/board?tab=realtime"
 BAIDU_HOT_SEARCH_DATA_DIRECTORY = "/home/ligang/data/baidu_hot_search/"
 WEIBO_HOT_SEARCH_URL = "https://weibo.com/ajax/statuses/hot_band"
 
+WEIBO_SOCIAL_REALTIME_HOT = "https://s.weibo.com/top/summary?cate=realtimehot"
 WEIBO_SOCIAL_EVENT_URL = "https://s.weibo.com/top/summary?cate=socialevent"
 WEIBO_ENT_RANK_URL = "https://s.weibo.com/top/summary?cate=entrank"
 WEIBO_SPORT_URL = "https://s.weibo.com/top/summary?cate=sport"
@@ -51,6 +52,7 @@ def downloadWeiboHot():
 
     # 下载要闻榜、文娱榜、体育榜、游戏榜
     url_dict = {
+        "realtimeho": WEIBO_SOCIAL_REALTIME_HOT,
         "socialevent": WEIBO_SOCIAL_EVENT_URL,
         "entrank": WEIBO_ENT_RANK_URL,
         "sport": WEIBO_SPORT_URL,
