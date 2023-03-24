@@ -286,7 +286,6 @@ def dedupImgs():
 
     print('sub directory count is %d' % len(all_dirs))
 
-
     for _dir in all_dirs:
         if _dir < 'D:/scene_data/data/com.s/com.smile.gifmaker/':
             continue

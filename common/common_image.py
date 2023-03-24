@@ -19,35 +19,50 @@ from PIL.ExifTags import TAGS
 from common.common_file import getExifByPil, getAllSubs
 
 
-def MoveShotImage(src_path, dest_path):
+def MoveShotImage(src_path, dest_path_shot, dest_path_unshot):
     src_path = src_path.replace('\\', '/')
-    dest_path = dest_path.replace('\\', '/')
+    dest_path_shot = dest_path_shot.replace('\\', '/')
+    dest_path_unshot = dest_path_unshot.replace('\\', '/')
 
     if not src_path.endswith('/'):
         src_path += '/'
-    if not dest_path.endswith('/'):
-        dest_path += '/'
+    if not dest_path_shot.endswith('/'):
+        dest_path_shot += '/'
+    if not dest_path_unshot.endswith('/'):
+        dest_path_unshot += '/'
 
     all_dirs, all_files = getAllSubs(src_path)
     print('file count=%d' % len(all_files))
 
-    for file in all_files:
-        lower_file = file.lower()
+    for file_dir in all_files:
+        file_name = os.path.basename(file_dir)
+        lower_file = file_name.lower()
         if lower_file.endswith('.jpg') or lower_file.endswith('.png'):
-            exifinfo = getExifByPil(file)
+            print("-------------- JPG PNG --------------")
+            exifinfo = getExifByPil(file_dir)
             model = exifinfo.get('Model', '').lower()
             if 'iphone' in model:
-                print(file, model)
-                new_path = dest_path + model
+                new_path = dest_path_shot + model
                 if not os.path.exists(new_path):
                     os.mkdir(new_path)
 
-                shutil.move(file, new_path + '/' + os.path.basename(file))
+                shutil.move(file_dir, new_path + '/' + file_name)
+                print("               Move %s Into %s" % (file_name, new_path))
+                continue
 
-            else:
-                print(file, exifinfo)
 
+        if lower_file.endswith('.heic'):
+            print("-------------- HEIC --------------")
+            new_path = dest_path_unshot + "HEIC"
+            if not os.path.exists(new_path):
+                os.mkdir(new_path)
+
+            shutil.move(file_dir, new_path + '/' + os.path.basename(file_name))
+            print("               Move %s Into %s" % (file_name, new_path))
             continue
+
+        print("               doing nothing to %s" % file_name)
+
 
 
 def CmpImageDirectory(src, dest, mode='default', ignore=[]):

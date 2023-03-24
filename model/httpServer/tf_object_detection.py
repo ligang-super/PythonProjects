@@ -14,9 +14,6 @@ flask： web框架，通过flask提供的装饰器@server.route()将普通函数
 # 创建一个服务，把当前这个python文件当做一个服务
 
 
-
-
-
 server = flask.Flask(__name__)
 
 

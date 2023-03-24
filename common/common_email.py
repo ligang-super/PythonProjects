@@ -12,6 +12,62 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
+
+class EmailServer(object):
+    def __init__(self, host, user, password, sender) -> None:
+        # 邮箱服务器地址
+        self.host = host
+        # 邮箱用户名
+        self.user = user
+        # 邮箱密码或授权码
+        self.password = password
+        # 邮件发送方邮箱地址
+        self.sender = sender
+
+        # 待发送邮件信息
+        self.email_title = ""
+        self.email_content = ""
+        self.receivers = []
+        self.attachments = []
+        self.message = None
+
+    def login_and_send(self, message):
+        # 登录并发送邮件
+        try:
+            smtp_obj = smtplib.SMTP()
+            # 连接到服务器
+            smtp_obj.connect(self.host, 25)
+            # 登录到服务器
+            smtp_obj.login(self.user, self.password)
+            # 发送
+            smtp_obj.sendmail(
+                self.sender, self.receivers, message.as_string())
+            # 退出
+            smtp_obj.quit()
+            print('success')
+            return True
+        except smtplib.SMTPException as e:
+            # 打印错误
+            print('error', e)
+        return False
+
+    def set_title(self, title):
+        self.email_title = title
+
+    def set_content(self, content):
+        self.email_content = content
+
+    def add_receiver(self, receiver):
+        self.receivers.append(receiver)
+
+    def add_attachment(self, attachment):
+        self.attachments.append(attachment)
+
+    def make_message(self):
+        self.message = None
+
+
+
 def __test_email():
     # 设置服务器所需信息
     # 163邮箱服务器地址
@@ -23,26 +79,26 @@ def __test_email():
     # 邮件发送方邮箱地址
     sender = 'ligang33baidu@163.com'
     # 邮件接受方邮箱地址，注意需要[]包裹，这意味着你可以写多个邮件地址群发
-    receivers = ['liganglife@163.com']
+    receivers = ['ligang33@baidu.com', 'ligang33baidu@163.com']
 
     # 设置email信息
     # 邮件内容设置
-    #message = MIMEText('content', 'plain', 'utf-8')
+    # message = MIMEText('content', 'plain', 'utf-8')
     message = MIMEMultipart()
     # 邮件主题
     message['Subject'] = 'title'
     # 发送方信息
     message['From'] = sender
     # 接受方信息
-    message['To'] = receivers[0]
+    message['To'] = 'ligang33@baidu.com; ligang33baidu@163.com'
 
     # 推荐使用html格式的正文内容，这样比较灵活，可以附加图片地址，调整格式等
     with open('D:/code/data/test/20230321_113631_entrank.html', 'rb') as fhtml:
         html_content = fhtml.read()
     # 设置html格式参数
     attached_html = MIMEText(html_content, 'html', 'utf-8')
-    attached_html['Content-Type'] = 'application/octet-stream'
-    attached_html['Content-Disposition'] = 'attachment;filename="20230321_113631_entrank.html"'
+    #attached_html['Content-Type'] = 'application/octet-stream'
+    #attached_html['Content-Disposition'] = 'attachment;filename="20230321_113631_entrank.html"'
 
     # 添加一个txt文本附件
     with open('D:/code/data/test/新建文本文档.txt', 'r') as ftxt:
@@ -172,4 +228,3 @@ def SendEmailWithDefaultConfig(to_email="", title="", content="", files=[]):
 if __name__ == '__main__':
     print(__file__)
     __test_email()
-
