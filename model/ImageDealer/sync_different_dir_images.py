@@ -41,9 +41,7 @@ def dealImage_20230219_sync():
 if __name__ == '__main__':
     #dealImage_20230219_sync()
     print("Hello")
-    srcFilePath = "C:/Users/Administrator/Pictures/我的照片/iphone6s plus/FNMZ1214.JPG"
-    destFilePath = "C:/Users/Administrator/Pictures/我的照片/iphone6s plus/FNMZ12142.JPG"
-    common_image.SynFileWin32Times(srcFilePath, destFilePath)
+
 
 
 

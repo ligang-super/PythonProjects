@@ -17,11 +17,13 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 from collections import defaultdict
 
+from common.common_file_ext import FileType, COMMON_FILE_EXTENSION_TYPE
+
 sys.argv.append(os.getcwd())
 
 GET_SIZE_TOTAL_COST = 0.0
 
-def getFileSize(file_path, stat_cost=True):
+def getFileSize(file_path, stat_cost=False):
     if stat_cost:
         global GET_SIZE_TOTAL_COST
         t1 = time.time()
@@ -142,6 +144,36 @@ def SynFileWin32Times(srcFile, destFile):
     win32file.SetFileTime(handle, new_ctime, new_atime, new_mtime)
     win32file.CloseHandle(handle)
 
+
+def get_file_type(extension):
+    ext = extension.lower()
+
+    return COMMON_FILE_EXTENSION_TYPE.get(ext, FileType.UNKNOWN)
+
+
+def get_filename_and_extension(fpath):
+    if "\\" or "/" in fpath:
+        file_name = os.path.basename(fpath)
+    else:
+        file_name = fpath
+
+    _l = file_name.split(".")
+    if len(_l) == 1:
+        return file_name, ""
+
+    return file_name[0:len(file_name)-len(_l[-1])-1], _l[-1]
+
+def get_ext_of_file(fpath):
+    if "\\" or "/" in fpath:
+        fname = os.path.basename(fpath)
+    else:
+        fname = fpath
+
+    l = fname.split(".")
+    if len(l) == 1:
+        return FileType.NONE
+    ext = l[-1].lower()
+    return ext, COMMON_FILE_EXTENSION_TYPE.get(ext, FileType.UNKNOWN)
 
 
 if __name__ == '__main__':
