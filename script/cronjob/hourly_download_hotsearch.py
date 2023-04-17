@@ -31,24 +31,29 @@ COOKIES_DIRECTORY = "/home/ligang/data/cookies/"
 
 
 def downloadBaiduHot():
-    nowstr = datetime.now().strftime("%Y%m%d_%H%M%S")
+    nowstr = datetime.now().strftime("%Y%m%d_%H")
     fname_hotsearch = BAIDU_HOT_SEARCH_DATA_DIRECTORY + nowstr + '.json'
-    html_hotsearch = BaiduHotSearch.download_html(BAIDU_HOT_SEARCH_URL)
-    json_dict = BaiduHotSearch.parse_html(html_hotsearch)
+    if not os.path.exists(fname_hotsearch):
+        html_hotsearch = BaiduHotSearch.download_html(BAIDU_HOT_SEARCH_URL)
+        json_dict = BaiduHotSearch.parse_html(html_hotsearch)
 
-    with open(fname_hotsearch, "w") as f:
-        json.dump(json_dict, f, ensure_ascii=False)
+        with open(fname_hotsearch, "w") as f:
+            json.dump(json_dict, f, ensure_ascii=False)
 
 def downloadWeiboHot():
-    nowstr = datetime.now().strftime("%Y%m%d_%H%M%S")
+    nowstr = datetime.now().strftime("%Y%m%d_%H")
 
     # 下载热搜榜
     fname_hotsearch = WEIBO_HOT_SEARCH_DATA_DIRECTORY + nowstr + '.json'
-    html_hotsearch = WeiboHotSearch.download_html(WEIBO_HOT_SEARCH_URL)
-    json_dict = WeiboHotSearch.parse_html(html_hotsearch)
 
-    with open(fname_hotsearch, "w") as f:
-        json.dump(json_dict, f, ensure_ascii=False)
+    if not os.path.exists(fname_hotsearch):
+        html_hotsearch = WeiboHotSearch.download_html(WEIBO_HOT_SEARCH_URL)
+        json_dict = WeiboHotSearch.parse_html(html_hotsearch)
+
+        with open(fname_hotsearch, "w") as f:
+            json.dump(json_dict, f, ensure_ascii=False)
+    else:
+        print(fname_hotsearch, "already exists")
 
     # 下载要闻榜、文娱榜、体育榜、游戏榜
     url_dict = {
@@ -61,10 +66,14 @@ def downloadWeiboHot():
 
     for category, down_url in url_dict.items():
         fname = WEIBO_HOT_SEARCH_DATA_DIRECTORY + nowstr + "_" + category + '.html'
-        html = WeiboHotSearch.download_html(down_url, cookies_dir=COOKIES_DIRECTORY)
 
-        with open(fname, "w") as f:
-            f.write(html)
+        if not os.path.exists(fname):
+            html = WeiboHotSearch.download_html(down_url, cookies_dir=COOKIES_DIRECTORY)
+
+            with open(fname, "w") as f:
+                f.write(html)
+        else:
+            print(fname, "already exists")
 
 
 
