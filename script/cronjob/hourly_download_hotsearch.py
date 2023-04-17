@@ -39,6 +39,8 @@ def downloadBaiduHot():
 
         with open(fname_hotsearch, "w") as f:
             json.dump(json_dict, f, ensure_ascii=False)
+    else:
+        print(fname_hotsearch, "already exists")
 
 def downloadWeiboHot():
     nowstr = datetime.now().strftime("%Y%m%d_%H")
