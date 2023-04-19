@@ -23,6 +23,7 @@ sys.argv.append(os.getcwd())
 
 GET_SIZE_TOTAL_COST = 0.0
 
+
 def getFileSize(file_path, stat_cost=False):
     if stat_cost:
         global GET_SIZE_TOTAL_COST
@@ -62,9 +63,6 @@ def getAllSubs(src_path):
     return all_dirs, all_files
 
 
-
-
-
 def getSameSizeFiles(src_path):
     all_dirs, all_files = getAllSubs(src_path)
 
@@ -79,29 +77,28 @@ def getSameSizeFiles(src_path):
             print(file_paths)
 
 
-
-
 def getExif(file_apth):
-    #path1 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-13 001.JPG'
-    #path2 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-17 015.PNG'
-    #path3 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-15 015.GIF'
-    #path4 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-11-08 032.MOV'
+    # path1 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-13 001.JPG'
+    # path2 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-17 015.PNG'
+    # path3 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-15 015.GIF'
+    # path4 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-11-08 032.MOV'
     f = open(file_apth, 'rb')
 
     tags = exifread.process_file(f)
     f.close()
-    #print("tags=", tags)
+    # print("tags=", tags)
     # 打印所有照片信息，会以键值对的方法保存
-    #for tag in tags.keys():
+    # for tag in tags.keys():
     #    print("Key: {0}, value {1}".format(tag, tags[tag]))
 
     # 打印照片其中一些信息
-    #print('拍摄时间：', tags['EXIF DateTimeOriginal'])
-    #print('照相机制造商：', tags['Image Make'])
-    #print('照相机型号：', tags['Image Model'])
-    #print('照片尺寸：', tags['EXIF ExifImageWidth'], tags['EXIF ExifImageLength'])
+    # print('拍摄时间：', tags['EXIF DateTimeOriginal'])
+    # print('照相机制造商：', tags['Image Make'])
+    # print('照相机型号：', tags['Image Model'])
+    # print('照片尺寸：', tags['EXIF ExifImageWidth'], tags['EXIF ExifImageLength'])
 
     return tags.get('Image Model')
+
 
 def getExifByPil(file_apth):
     img = Image.open(file_apth)
@@ -161,7 +158,8 @@ def get_filename_and_extension(fpath):
     if len(_l) == 1:
         return file_name, ""
 
-    return file_name[0:len(file_name)-len(_l[-1])-1], _l[-1]
+    return file_name[0:len(file_name) - len(_l[-1]) - 1], _l[-1]
+
 
 def get_ext_of_file(fpath):
     if "\\" or "/" in fpath:
@@ -176,32 +174,179 @@ def get_ext_of_file(fpath):
     return ext, COMMON_FILE_EXTENSION_TYPE.get(ext, FileType.UNKNOWN)
 
 
+def get_directory_files_crtime(src_path):
+    all_dirs, all_files = getAllSubs(src_path)
+
+    tend = '0000.00.00'
+    tbegin = '9999.99.99'
+    for fname in all_files:
+        t = os.path.getctime(fname)
+        time_struct = time.localtime(t)
+        timestr = time.strftime('%Y.%m.%d', time_struct)
+
+        if timestr < tbegin:
+            tbegin = timestr
+        if timestr > tend:
+            tend = timestr
+
+    return tbegin, tend
+
+
+def get_filename_and_extion(fpath):
+    if "\\" or "/" in fpath:
+        fname = os.path.basename(fpath)
+    else:
+        fname = fpath
+
+    l = fname.split(".")
+    if len(l) == 1:
+        return fname, ""
+
+    return fname[0:len(fname) - len(l[-1]) - 1], l[-1]
+
+
+def move_dir(src_path, dest_path, rename=True):
+    if os.path.exists(dest_path):
+        dir_name = os.path.basename(src_path)
+        if dest_path.endswith("\\") or dest_path.endswith("/"):
+            pass
+        else:
+            dest_path += "/"
+
+        if os.path.exists(dest_path + dir_name):
+            if not rename:
+                return False
+
+            pos = dir_name.rfind("_")
+            if pos == -1 and dir_name[pos + 1:].isdigit():
+                num = int(dir_name[pos + 1:])
+                for i in range(1, 1000):
+                    new_dir_name = dir_name[0:pos] + "_" + str(num + i)
+                    if os.path.exists(dest_path + new_dir_name):
+                        new_dir_name = ""
+                        continue
+                    else:
+                        break
+            else:
+                for i in range(1, 1000):
+                    new_dir_name = dir_name + "_" + str(i)
+                    if os.path.exists(dest_path + new_dir_name):
+                        new_dir_name = ""
+                        continue
+                    else:
+                        break
+
+            if not new_dir_name:
+                return False
+
+            shutil.move(src_path, dest_path + new_dir_name)
+            return True
+
+    shutil.move(src_path, dest_path + dir_name)
+    return True
+
+
+def move_file(src_path, dest_path, rename=False):
+    if not os.path.exists(dest_path):
+        shutil.move(src_path, dest_path)
+        return True
+
+    filename = os.path.basename(dest_path)
+    dirname = os.path.dirname(dest_path)
+    if dirname == "":
+        dirname = "./"
+    if dirname.endswith("\\") or dirname.endswith("/"):
+        pass
+    else:
+        dirname += "/"
+
+
+        if dest_path.endswith("\\") or dest_path.endswith("/"):
+            pass
+        else:
+            dest_path += "/"
+
+        if os.path.exists(dest_path + dir_name):
+            if not rename:
+                return False
+
+            pos = dir_name.rfind("_")
+            if pos == -1 and dir_name[pos + 1:].isdigit():
+                num = int(dir_name[pos + 1:])
+                for i in range(1, 1000):
+                    new_dir_name = dir_name[0:pos] + "_" + str(num + i)
+                    if os.path.exists(dest_path + new_dir_name):
+                        new_dir_name = ""
+                        continue
+                    else:
+                        break
+            else:
+                for i in range(1, 1000):
+                    new_dir_name = dir_name + "_" + str(i)
+                    if os.path.exists(dest_path + new_dir_name):
+                        new_dir_name = ""
+                        continue
+                    else:
+                        break
+
+            if not new_dir_name:
+                return False
+
+            shutil.move(src_path, dest_path + new_dir_name)
+            return True
+
+    shutil.move(src_path, dest_path + dir_name)
+    return True
+
+
+def move(src_path, dest_path, rename=False):
+    if not os.path.exists(src_path):
+        return False
+    if not os.path.exists(dest_path):
+        shutil.move(src_path, dest_path)
+        return True
+
+    if os.path.isdir(src_path) and os.path.isdir(dest_path):
+        return move_dir(src_path, dest_path, rename=rename)
+    elif os.path.isfile(src_path) and os.path.isfile(dest_path):
+        return move_file(src_path, dest_path, rename=rename)
+    elif os.path.isfile(src_path) and os.path.isdir(dest_path):
+        filename = os.path.basename(src_path)
+        if dest_path.endswith("\\") or dest_path.endswith("/"):
+            pass
+        else:
+            dest_path += "/"
+        return move_file(src_path, dest_path + filename, rename=rename)
+    else:
+        return False
+
+
+
+
+
 if __name__ == '__main__':
     pass
 
-    #getExif()
-    #getFiles()
+    # getExif()
+    # getFiles()
 
-    #path1 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-13 001.JPG'
-    #path2 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-17 015.PNG'
-    #path3 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-15 015.GIF'
-    #path4 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-11-08 032.MOV'
-    #getExifByPil(path1)
+    # path1 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-13 001.JPG'
+    # path2 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-17 015.PNG'
+    # path3 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-10-15 015.GIF'
+    # path4 = 'E:/Images/Present/Current_iPhone11/图片/2022-09-07 - 2022-11-09/2022-11-08 032.MOV'
+    # getExifByPil(path1)
 
-    #getSize()
+    # getSize()
 
-    #all_dirs, all_files = getAllSubs('E:/Images/李其乐')
-    #print(all_dirs)
-    #print(all_files)
+    # all_dirs, all_files = getAllSubs('E:/Images/李其乐')
+    # print(all_dirs)
+    # print(all_files)
 
-    #getSameSizeFiles('E:/Images/李其乐/ALL_IMAGES')
-    #getSameSizeFiles('E:/Images/History')
+    # getSameSizeFiles('E:/Images/李其乐/ALL_IMAGES')
+    # getSameSizeFiles('E:/Images/History')
 
-    #changeMp3Tag(dirpath="E:/Music/录音笔/高效能人士的七个习惯")
+    # changeMp3Tag(dirpath="E:/Music/录音笔/高效能人士的七个习惯")
 
-    #path = "E:/Music/录音笔/《人生只有一件事》-金惟纯/000. 自序 学怎么活.mp3"
-    #audiofile = eyed3.load(path)
-    #print(os.stat(path))
-
-
-
+    # path = "E:/Music/录音笔/《人生只有一件事》-金惟纯/000. 自序 学怎么活.mp3"
+    # audiofile = eyed3.load(path)
+    # print(os.stat(path))
