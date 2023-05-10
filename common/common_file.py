@@ -11,7 +11,7 @@ import time
 import datetime
 import win32file
 import exifread
-import eyed3
+import hashlib
 import shutil
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -321,10 +321,31 @@ def move(src_path, dest_path, rename=False):
         return False
 
 
+def get_md5_of_small_file(fpath: str) -> str:
+    t1 = time.time()
+    with open(fpath, 'rb') as fp:
+        data = fp.read()
+    file_md5 = hashlib.md5(data).hexdigest()
+    t2 = time.time()
+    print("cost:", t2*1000-t1*1000)
+    return file_md5
 
+
+def get_md5_of_big_file(fpath: str) -> str:
+    t1 = time.time()
+    with open(fpath, "rb") as f:
+        file_hash = hashlib.md5()
+        while chunk := f.read(65536):
+            file_hash.update(chunk)
+    file_md5 = file_hash.hexdigest()
+    t2 = time.time()
+    print("cost:", t2*1000-t1*1000)
+    return file_md5
 
 
 if __name__ == '__main__':
+    print(len(get_md5_of_small_file("D:/baidu_ocr.py")))
+    print(get_md5_of_big_file("D:/baidu_ocr.py"))
     pass
 
     # getExif()

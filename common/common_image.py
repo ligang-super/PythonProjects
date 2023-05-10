@@ -7,7 +7,7 @@ import sys
 sys.path.append(os.getcwd())
 sys.path.append(os.getcwd() + '/../')
 
-
+import cv2
 import chardet
 import exifread
 import eyed3
@@ -15,6 +15,7 @@ import shutil
 from collections import defaultdict
 from PIL import Image
 from PIL.ExifTags import TAGS
+from numpy import average, linalg, dot
 
 from common.common_file import getExifByPil, getAllSubs
 
@@ -306,8 +307,12 @@ def SynFiles(src_path, dest_path, ignore=[], syn_mode=1):
 
 
 
+
+
+
 if __name__ == '__main__':
     print(__file__)
+
     pass
     #ignore_dirs = ['E:/Images/Web/', 'E:/Images/Present/']
     #diffs = cmp_img_dir('E:/Images', 'F:/Images', ignore=ignore_dirs)
