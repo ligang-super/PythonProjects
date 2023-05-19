@@ -3,10 +3,6 @@
 
 import os
 import sys
-
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../')
-
 import time
 import datetime
 import win32file
@@ -17,9 +13,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 from collections import defaultdict
 
-from common.common_file_ext import FileType, COMMON_FILE_EXTENSION_TYPE
-
-sys.argv.append(os.getcwd())
+from .common_file_ext import FileType, COMMON_FILE_EXTENSION_TYPE
 
 GET_SIZE_TOTAL_COST = 0.0
 

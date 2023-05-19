@@ -9,9 +9,6 @@ from PIL import Image
 from numpy import average, linalg, dot
 from imagededup.methods import PHash
 
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../')
-
 
 def calc_equation(img1, img2, shape=(100, 100)):
     if img1.shape[0] == shape[0] and img1.shape[1] == shape[1]:

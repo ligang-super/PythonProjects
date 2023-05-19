@@ -6,6 +6,7 @@ import json
 import hashlib
 import xml.dom.minidom
 import os
+import sys
 from collections import defaultdict
 import shutil
 import requests
@@ -141,15 +142,18 @@ def parseXmlFile3(xmlstring):
 
 if __name__ == '__main__':
     print('----------dataDealer----------')
-    dirpath = "D:/code/data/droidbot_output/神庙逃亡2/u2"
-    xmlfile = "20230424_195618.xml"
-    xmlpath = os.path.join(dirpath, xmlfile)
+    print(sys.path)
+    print(common_file.FileType)
+
+    #dirpath = "D:/code/data/droidbot_output/神庙逃亡2/u2"
+    #xmlfile = "20230424_195618.xml"
+    #xmlpath = os.path.join(dirpath, xmlfile)
 
     #getPkgname(xmlpath)
 
-    with open(xmlpath, "rb") as f:
-        xml_string = f.read()
-    print(parseXmlFile3(xml_string))
+    #with open(xmlpath, "rb") as f:
+    #    xml_string = f.read()
+    #print(parseXmlFile3(xml_string))
 
 
 

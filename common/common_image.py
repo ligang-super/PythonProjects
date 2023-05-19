@@ -3,10 +3,6 @@
 
 import os
 import sys
-
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../')
-
 import cv2
 import chardet
 import exifread
@@ -17,7 +13,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 from numpy import average, linalg, dot
 
-from common.common_file import getExifByPil, getAllSubs
+from .common_file import getExifByPil, getAllSubs
 
 
 def MoveShotImage(src_path, dest_path_shot, dest_path_unshot):

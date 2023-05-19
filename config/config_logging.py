@@ -3,9 +3,6 @@
 
 import os
 import sys
-
-sys.argv.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../../')
 import re
 import logging
 import logging.handlers
@@ -39,9 +36,9 @@ def setup_logger(server_name, log_path, logger_name="PythonProject"):
     fh.setFormatter(formatter)  # 设置写到日志文件格式
     logger.addHandler(fh)
 
-    logger.debug('debug message')
-    logger.info('info message')
-    logger.warning('warn message')
-    logger.error('error message')
+    #logger.debug('debug message')
+    #logger.info('info message')
+    #logger.warning('warn message')
+    #logger.error('error message')
 
     return logger

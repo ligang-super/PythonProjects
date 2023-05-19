@@ -3,15 +3,11 @@
 
 import os
 import sys
-
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../')
-
 import time
 import eyed3
 from collections import defaultdict
 from operator import itemgetter
-from common.common_file import getAllSubs
+from .common_file import getAllSubs
 
 def changeMp3Tag(dirpath=""):
     if not dirpath:

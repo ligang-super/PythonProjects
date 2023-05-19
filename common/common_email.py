@@ -3,10 +3,6 @@
 
 import os
 import sys
-
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd() + '/../')
-
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
