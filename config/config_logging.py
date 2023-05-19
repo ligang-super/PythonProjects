@@ -8,25 +8,28 @@ import logging
 import logging.handlers
 
 
-def setup_logger(server_name, log_path, logger_name="PythonProject"):
+def setup_logger(file_name, log_path, logger_name="PythonProject", console_output=False):
     # create logger
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
 
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    # create directory
+    if not os.path.exists(log_path):
+        os.mkdir(log_path)
 
     # create formatter
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)s - %(message)s')
 
-    # add formatter to ch
-    ch.setFormatter(formatter)
+    if console_output:
+        # create console handler and set level to debug
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        # add formatter to ch
+        ch.setFormatter(formatter)
+        # add ch to logger
+        logger.addHandler(ch)
 
-    # add ch to logger
-    logger.addHandler(ch)
-
-    log_name = os.path.join(log_path, server_name)
+    log_name = os.path.join(log_path, file_name)
 
     fh = logging.handlers.TimedRotatingFileHandler(log_name, when="H", interval=1, backupCount=24 * 7,
                                                    encoding='utf-8')
@@ -36,9 +39,11 @@ def setup_logger(server_name, log_path, logger_name="PythonProject"):
     fh.setFormatter(formatter)  # 设置写到日志文件格式
     logger.addHandler(fh)
 
+    # test
     #logger.debug('debug message')
     #logger.info('info message')
     #logger.warning('warn message')
     #logger.error('error message')
 
     return logger
+
