@@ -4,7 +4,7 @@
 import enum
 
 @enum.unique
-class FileType(enum.Enum):
+class FileType(enum.IntEnum):
     NONE        = 0     # 无后缀
     VIDEO       = 1     # 视频
     IMAGE       = 2     # 静态图
@@ -15,21 +15,22 @@ class FileType(enum.Enum):
     DOCFILE     = 7     # 系统和应用的文本文件
 
     EXE         = 101   # 可执行文件
-    HIDDEN      = 102  # 隐藏文件
-    APP         = 103  # apk或app安装文件
+    HIDDEN      = 102   # 隐藏文件
+    APP         = 103   # apk或app安装文件
 
-    LINK        = 201     # URL地址
-    HTML        = 202     # 网页
+    LINK        = 201   # URL地址
+    HTML        = 202   # 网页
 
-    FID         = 301     # 文件标识符描述符
-    MEP         = 302    # 爱剪辑中间文件
+    FID         = 301   # 文件标识符描述符
+    MEP         = 302   # 爱剪辑中间文件
     DOWNLOAD    = 303   # 下载使用文件
-    LOG         = 304    # 日志文件
-    CONFIG      = 305  # 配置文件
+    LOG         = 304   # 日志文件
+    CONFIG      = 305   # 配置文件
 
-    BAK         = 401    # 备份文件
+    BAK         = 401   # 备份文件
 
-    UNKNOWN     = 999    # 未知
+    UNKNOWN     = 999   # 未知
+
 
 COMMON_FILE_EXTENSION_TYPE = {
         'zip': FileType.ZIP,

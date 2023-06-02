@@ -1,0 +1,4 @@
+2023-05-24 14:07:54,368 - mysqldb - DEBUG - common_pymysql.py:168 - pymysql.connect begin host=106.12.153.94, port=8306, db=life
+2023-05-24 14:07:54,446 - mysqldb - DEBUG - common_pymysql.py:197 - pymysql.connect done host=106.12.153.94, port=8306, db=life
+2023-05-24 14:07:57,759 - mysqldb - DEBUG - common_pymysql.py:462 - [SLOW]GET[106.12.153.94] sql=SELECT file_name FROM adult_files WHERE (file_type=1),args=(),time=3.313096284866333
+2023-05-24 14:07:57,759 - mysqldb - DEBUG - common_pymysql.py:427 - _safe_run on 106.12.153.94 use <class 'ggsdk.mysql.common_pymysql.MysqlConnection'> spends 3313.0963 ms

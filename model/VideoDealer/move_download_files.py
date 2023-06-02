@@ -58,7 +58,7 @@ def statistic_directory(dir):
     total_size = 0
     for fpath in files:
         fname = os.path.basename(fpath)
-        ext_string, ext_type = common_file.get_ext_of_file(fname)
+        ext_string, ext_type = common_file.get_ext_and_filetype(fname)
 
         if ext_type not in res_dict:
             res_dict[ext_type] = {
@@ -225,7 +225,7 @@ def move_downloaded_files(src_path, dest_path, evaluate=True):
 
             other_dirs.append({"dir_src": _path})
         else:
-            ext_string, ext_type = common_file.get_ext_of_file(_path)
+            ext_string, ext_type = common_file.get_ext_and_filetype(_path)
             if ext_type == FileType.VIDEO:
                 _new_path = dest_path + dir_name
 

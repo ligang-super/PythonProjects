@@ -1,10 +1,7 @@
 #coding:utf-8
+
 import os.path
-import time
-from operator import itemgetter
-from collections import defaultdict
-import pymysql
-from common.mysql import common_pymysql
+from ggsdk.mysql import common_pymysql
 from config.config_logging import setup_logger
 
 

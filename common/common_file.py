@@ -31,6 +31,13 @@ def getFileSize(file_path, stat_cost=False):
     return file_size
 
 
+def get_file_crtime(file_path: str, stat_cost: bool=False) -> datetime:
+    ctime = os.path.getctime(file_path)  # 创建时间
+    ctime_string = datetime.datetime.fromtimestamp(int(ctime))
+    return ctime_string
+
+
+
 def getAllSubs(src_path):
     '''
     获取路径下所有的文件夹和文件，
@@ -155,7 +162,10 @@ def get_filename_and_extension(fpath):
     return file_name[0:len(file_name) - len(_l[-1]) - 1], _l[-1]
 
 
-def get_ext_of_file(fpath):
+def get_ext_and_filetype(fpath):
+    if not fpath:
+        return FileType.NONE, FileType.UNKNOWN
+
     if "\\" or "/" in fpath:
         fname = os.path.basename(fpath)
     else:
@@ -163,7 +173,7 @@ def get_ext_of_file(fpath):
 
     l = fname.split(".")
     if len(l) == 1:
-        return FileType.NONE
+        return FileType.NONE, FileType.UNKNOWN
     ext = l[-1].lower()
     return ext, COMMON_FILE_EXTENSION_TYPE.get(ext, FileType.UNKNOWN)
 
@@ -316,30 +326,62 @@ def move(src_path, dest_path, rename=False):
 
 
 def get_md5_of_small_file(fpath: str) -> str:
-    t1 = time.time()
+    #t1 = time.time()
     with open(fpath, 'rb') as fp:
         data = fp.read()
     file_md5 = hashlib.md5(data).hexdigest()
-    t2 = time.time()
-    print("cost:", t2*1000-t1*1000)
+    #t2 = time.time()
+    #print("cost:", t2*1000-t1*1000)
     return file_md5
 
 
 def get_md5_of_big_file(fpath: str) -> str:
-    t1 = time.time()
+    #t1 = time.time()
     with open(fpath, "rb") as f:
         file_hash = hashlib.md5()
         while chunk := f.read(65536):
             file_hash.update(chunk)
     file_md5 = file_hash.hexdigest()
-    t2 = time.time()
-    print("cost:", t2*1000-t1*1000)
+    #t2 = time.time()
+    #print("cost:", t2*1000-t1*1000)
     return file_md5
 
 
+def get_md5_of_big_file_prev1m(fpath: str) -> str:
+    #t1 = time.time()
+    with open(fpath, "rb") as f:
+        file_hash = hashlib.md5()
+        chunk = f.read(1024 * 1024)
+        file_hash.update(chunk)
+    file_md5 = file_hash.hexdigest()
+    #t2 = time.time()
+    #print("cost:", t2*1000-t1*1000)
+    return file_md5
+	
+	
+def create_soft_link(src, dest):
+    system_str = platform.system().lower()
+    if system_str == "windows":
+        if os.path.isfile(src):
+            import win32com.client
+            shell = win32com.client.Dispatch("WScript.Shell")
+            shortcut = shell.CreateShortCut(dest +".lnk")
+            shortcut.Targetpath = src
+            shortcut.WorkingDirectory = os.path.dirname(src)
+            shortcut.save()
+        else:
+            os.symlink("F:/迅雷下载/", "D:/迅雷下载/1")
+    elif system_str == "linux":
+        pass
+    else:
+        pass
+
+
 if __name__ == '__main__':
-    print(len(get_md5_of_small_file("D:/baidu_ocr.py")))
-    print(get_md5_of_big_file("D:/baidu_ocr.py"))
+    #print(len(get_md5_of_small_file("D:/baidu_ocr.py")))
+    #print(get_md5_of_big_file("D:/baidu_ocr.py"))
+
+    print(get_file_crtime("D:/baidu_ocr.py"))
     pass
 
     # getExif()
