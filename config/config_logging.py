@@ -10,6 +10,18 @@ import logging.handlers
 
 def setup_logger(file_name, log_path, logger_name="PythonProject", console_output=False):
     # create logger
+    if not log_path.startswith('/'):
+        log_path = '/' + log_path
+    log_path = log_path.replace('\\', '/')
+    if sys.platform == "win32":
+        # windows环境
+        log_path = "D:/code/log/" + log_path
+    elif sys.platform == "linux":
+        # linux环境
+        log_path = "/var/log" + log_path
+    else:
+        log_path = "./log" + log_path
+
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
 
