@@ -10,7 +10,6 @@ def init_life_dbw():
                                          dbpass='mysql_123456',
                                          pool_size=10,
                                          cls_name=common_pymysql.MysqlConnection,
-                                         #host='106.12.153.94',
                                          host='127.0.0.1',
                                          port=8306,
                                          dbname='life',
