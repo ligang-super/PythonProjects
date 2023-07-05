@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>百望山</title>
+    <style type="text/css">
+/* CSS Document */
+.tabtop13 {
+	margin-top: 13px;
+}
+.tabtop13 td{
+	background-color:#ffffff;
+	height:25px;
+	line-height:150%;
+}
+.font-center{ text-align:center}
+.btbg{background:#e9faff !important;}
+.btbg1{background:#f2fbfe !important;}
+.btbg2{background:#f3f3f3 !important;}
+.biaoti{
+	font-family: 微软雅黑;
+	font-size: 26px;
+	font-weight: bold;
+	border-bottom:1px dashed #CCCCCC;
+	color: #255e95;
+}
+.titfont {
+
+	font-family: 微软雅黑;
+	font-size: 16px;
+	font-weight: bold;
+	background-color:#e9faff;
+}
+.tabtxt2 {
+	font-family: 微软雅黑;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: right;
+	padding-right: 10px;
+	color:#327cd1;
+}
+.tabtxt3 {
+	font-family: 微软雅黑;
+	font-size: 14px;
+	padding-left: 15px;
+	color: #000;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	line-height: 20px;
+}
+</style>
+</head>
+<body>
+
+    <div>
+            <form method="get" action="add_bws" style="display:inline-block;">
+                <tr>
+                    <td>日期：<input type="text" name="make_date" id="make_date" value="{{default_daystr}}"></td>
+                    </td>
+                </td>
+                    <td><input type="submit" value="添加"></td>
+                </tr>
+            </form>
+    </div>
+<div>
+<table width="100%" border="1" cellspacing="0" cellpadding="4" class="tabtop13">
+    <thead align="center" >
+        <th>ID</th>
+        <th>总序号</th>
+        <th>月序号</th>
+        <th>日期</th>
+        <th>操作</th>
+    </thead>
+    <tbody align="left" >
+        {% for t in data_list%}
+        <tr>
+            <td>
+                {{t.id}}
+            </td>
+            <td>
+                {{t.total_idx}}
+            </td>
+            <td>
+                {{t.month_idx}}
+            </td>
+            <td>
+                {{t.date_str}}
+            </td>
+            <td>
+                <button type="button" id="delete_bws" ac="1" delid="{{t.id}}" class="btn btn-danger" onclick="buttonClick(this, '{{t.id}}')">删除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+<script src="../../static/js/jquery-3.7.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    function getRegularAjaxResponse(r) {
+    if (typeof r == 'string') {
+        r = parseInt(r);
+    }
+    var alertStr;
+    switch (r) {
+        case 10:
+            alertStr = "请先登录";
+            break;
+        case 100:
+            alertStr = "失败";
+            break;
+        case 500:
+            alertStr = "服务器内部错误";
+            break;
+        case 10000:
+            alertStr = "邮件地址不存在";
+            break;
+        case 10001:
+            alertStr = "密码不合法";
+            break;
+        case 10002:
+            alertStr = "请输入你的额淘友邮箱";
+            break;
+        case 20001:
+            alertStr = "删除失败";
+            break;
+        case 20002:
+            alertStr = "失败 可以已经赞过了";
+            break;
+        case 30001:
+            alertStr = "参数缺失或者无效";
+            break;
+        case 30002:
+            alertStr = "话题不存在";
+            break;
+        case 30003:
+            alertStr = "话题不存在";
+            break;
+        case 30004:
+            alertStr = "对话不存在";
+            break;
+        case 30005:
+           alertStr = "添加标签失败";
+           break;
+        case 30006:
+           alertStr = "删除标签失败";
+           break;
+        case 30007:
+           alertStr = "职位审核失败";
+           break;
+        case 30008:
+           alertStr = "发消息失败";
+           break;
+        case 30009:
+           alertStr = "回复评论失败";
+           break;
+        case 30010:
+            alertStr = "删除动态失败";
+            break;
+        case 30011:
+            alertStr = "还原评论失败";
+            break;
+        case 30012:
+            alertStr = "删除Logo失败";
+            break;
+        case 30013:
+            alertStr = "上传Logo失败";
+            break;
+        case 30014:
+            alertStr = "失败 可以已经赞过了";
+            break;
+        case 30015:
+            alertStr = "认证相关操作失败";
+            break;
+        case 30016:
+            alertStr = "八卦微信操作失败";
+            break;
+        case 30017:
+            alertStr = "八卦微信标题失败";
+            break;
+        case 30018:
+            alertStr = "恢复八卦失败";
+            break;
+        case 30019:
+            alertStr = "恢复动态失败";
+            break;
+        case 30020:
+            alertStr = "业务联系标记失败";
+            break;
+        case 30021:
+            alertStr = "业务联系备注失败";
+            break;
+        case 30022:
+            alertStr = "处理失败";
+            break;
+        case 30023:
+            alertStr = "无法反馈给脉课堂";
+            break;
+        case 30024:
+            alertStr = "教育经历数据未同步完成，请稍后再试";
+            break;
+        default :
+            alertStr = "未知错误";
+            break;
+    }
+    return alertStr;
+}
+
+//plugin for form submit double check
+(function ($) {
+    $.SUCCESS = "1";
+    $.fn.disableSubmit = function () {
+        this.addClass("submit-lock");
+    };
+    $.fn.enableSubmit = function () {
+        this.removeClass("submit-lock");
+    };
+    $.fn.isSubmitEnable = function () {
+        return !this.hasClass("submit-lock");
+    };
+    $.fn.disableClick = function () {
+        this.addClass("click-lock");
+    };
+    $.fn.enableClick = function () {
+        this.removeClass("click-lock");
+    };
+    $.fn.isClickEnable = function () {
+        return !this.hasClass("click-lock");
+    };
+    $.fn.safeSubmit = function (formSelector, redir, callback) {
+        if (this.isSubmitEnable()) {
+            this.disableSubmit();
+            var $form = $(formSelector);
+            var $this = this;
+            if ($form[0].checkValidity()) {
+                $form.ajaxSubmit({"success":function (r) {
+                    $this.enableSubmit();
+                    if (r == "1") {
+                        if (callback && typeof callback == 'function') callback();
+                        location.href = redir;
+                    } else {
+                        alert(getRegularAjaxResponse(r));
+                    }
+                }});
+            } else {
+                this.enableSubmit();
+                alert("请填写正确的信息!");
+            }
+        }
+    }
+})(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        $('button').on("click", function () {
+            var btn = $(this);
+            if (btn.isClickEnable()) {
+                var ac = btn.attr("ac");
+                btn.disableClick();
+                if(ac == "1"){
+                    var op_desc = '';
+                    var delid = btn.attr("delid");
+                    op_desc = '确认删除';
+                    if (window.confirm(op_desc+" id: "+delid + "？")) {
+                        btn.html = "请等待..."
+                        $.get("delete_bws?delid=" + delid
+                            , function (r) {
+                                if (r == "1") {
+                                    btn.html = "操作成功";
+                                    location.reload();
+                                } else {
+                                    alert(getRegularAjaxResponse(r));
+                                }
+                            });
+                    }
+                    }
+                btn.enableClick();
+            }
+        });
+
+    </script>
+
+</body>
+</html>
+
