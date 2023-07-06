@@ -5,12 +5,15 @@ import sys
 import datetime
 from flask import render_template, request, redirect, url_for, make_response, jsonify, Blueprint
 from model.HttpServer.web_server.mysql_lifedb import life_dbw
+from flask_login import login_required
+
 
 sys.path.append(os.getcwd() + '/HttpServer/')
 
 saikesi_job = Blueprint('saikesi', __name__)
 
 @saikesi_job.route('/list_s', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def list_s():
     print("ip:", request.remote_addr, request.remote_user)
     tab_datas = life_dbw.get_data(table='sai_ke_si_info', orderby="mdate desc,id desc")
@@ -53,6 +56,7 @@ def list_s():
 
 
 @saikesi_job.route('/add_s', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def add_s():
     make_date = request.args.get("make_date", "")
     make_place = request.args.get("make_place", "")
@@ -74,6 +78,7 @@ def add_s():
 
 
 @saikesi_job.route('/delete_s', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def delete_s():
     delid = request.args.get("delid", "")
 

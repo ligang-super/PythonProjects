@@ -5,12 +5,14 @@ import sys
 import datetime
 from flask import render_template, request, redirect, url_for, make_response, jsonify, Blueprint
 from model.HttpServer.web_server.mysql_lifedb import life_dbw
+from flask_login import login_required
 
 sys.path.append(os.getcwd() + '/HttpServer/')
 
 baiwangshan_job = Blueprint('baiwangshan', __name__)
 
 @baiwangshan_job.route('/list_bws', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def list_bws():
     print("ip:", request.remote_addr, request.remote_user)
     tab_datas = life_dbw.get_data(table='bai_wang_shan_info', orderby="mdate, id")
@@ -47,6 +49,7 @@ def list_bws():
 
 
 @baiwangshan_job.route('/add_bws', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def add_bws():
     make_date = request.args.get("make_date", "")
 
@@ -61,6 +64,7 @@ def add_bws():
 
 
 @baiwangshan_job.route('/delete_bws', methods=['POST', 'GET'])  # 添加路由
+@login_required
 def delete_bws():
     delid = request.args.get("delid", "")
 
@@ -68,6 +72,4 @@ def delete_bws():
     life_dbw.delete_data_by_id(table='bai_wang_shan_info', idx=delid)
 
     return make_response("1")
-
-
 
