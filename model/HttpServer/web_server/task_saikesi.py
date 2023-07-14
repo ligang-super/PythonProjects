@@ -6,6 +6,7 @@ import datetime
 from flask import render_template, request, redirect, url_for, make_response, jsonify, Blueprint
 from model.HttpServer.web_server.mysql_lifedb import life_dbw
 from flask_login import login_required
+from conf.web_server_conf import SAI_KE_SI_TYPES
 
 
 sys.path.append(os.getcwd() + '/HttpServer/')
@@ -18,20 +19,13 @@ def list_s():
     print("ip:", request.remote_addr, request.remote_user)
     tab_datas = life_dbw.get_data(table='sai_ke_si_info', orderby="mdate desc,id desc")
 
+    mtype_desc = {}
+    for item in SAI_KE_SI_TYPES:
+        mtype_desc[int(item["mtype"])] = item["mdesc"]
+
     data_list = []
     for element in tab_datas:
-        if element["mtype"] == 0:
-            sex_type = "Lu"
-        elif element["mtype"] == 1:
-            sex_type = "Wai"
-        elif element["mtype"] == 2:
-            sex_type = "Kou"
-        elif element["mtype"] == 3:
-            sex_type = "Nei"
-        elif element["mtype"] == 4:
-            sex_type = "Tun"
-        else:
-            sex_type = "None"
+        sex_type = mtype_desc.get(element["mtype"], "None")
 
         date_str = element["mdate"].strftime("%Y-%m-%d")
         data_list.append({
@@ -46,9 +40,11 @@ def list_s():
     default_location = request.args.get("make_place", "北京")
     default_user = request.args.get("make_user", "Hua")
     default_type = request.args.get("make_type", "1")
+    minfo_list = SAI_KE_SI_TYPES
 
     return render_template('web_server/list_saikesi.html',
                            data_list=data_list,
+                           minfo_list=minfo_list,
                            default_daystr=default_daystr,
                            default_type=default_type,
                            default_location=default_location,

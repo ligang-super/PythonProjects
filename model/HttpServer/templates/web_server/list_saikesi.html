@@ -64,11 +64,9 @@
                     <td>方式：
                     <select name="make_type" id="make_type" style="width: 190px; height: 20px; margin: -2px;">
                         <option value="" style="color: #c2c2c2;">---请选择---</option>
-                        <option value="0" {% if default_type=="0" %}selected="selected"{% endif %}>Lu</option>
-                        <option value="1" {% if default_type=="1" %}selected="selected"{% endif %}>Wai</option>
-                        <option value="2" {% if default_type=="2" %}selected="selected"{% endif %}>Kou</option>
-                        <option value="3" {% if default_type=="3" %}selected="selected"{% endif %}>Nei</option>
-                        <option value="4" {% if default_type=="4" %}selected="selected"{% endif %}>Tun</option>
+                        {% for minfo in minfo_list %}
+                        <option value={{minfo.mtype}} {% if default_type==minfo.mtype %} selected="selected" {% endif %}>{{minfo.mdesc}}</option>
+                        {% endfor %}
                     </select>
                 </td>
                     <td><input type="submit" value="添加"></td>
