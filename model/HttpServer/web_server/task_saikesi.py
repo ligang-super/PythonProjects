@@ -57,12 +57,15 @@ def add_s():
     make_date = request.args.get("make_date", "")
     make_place = request.args.get("make_place", "")
     make_user = request.args.get("make_user", "")
-    make_type = request.args.get("make_type", 1)
+    make_type = int(request.args.get("make_type", 1))
+    if make_type == 0:
+        make_user = ""
+
     print(make_date, make_place, make_user, make_type)
 
     val_dict = {
         "user_name": make_user,
-        "mtype": int(make_type),
+        "mtype": make_type,
         "location": make_place,
         "mdate": make_date,
     }

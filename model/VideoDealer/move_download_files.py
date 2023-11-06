@@ -4,6 +4,9 @@
 import os
 import sys
 
+sys.argv.append(os.getcwd())
+sys.path.append(os.getcwd() + '/../../')
+
 import time
 import datetime
 import exifread

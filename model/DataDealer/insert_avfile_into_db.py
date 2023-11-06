@@ -45,7 +45,7 @@ def generate_json_file_by_search_directory_files(src_path, json_file):
 
         download_time = common_file.get_file_crtime(absolute_path)
         file_size = common_file.getFileSize(absolute_path)
-        if file_size >=  1024 * 1024:
+        if file_size >= 1024 * 1024:
             file_md5 = common_file.get_md5_of_big_file_prev1m(absolute_path)
         else:
             file_md5 = common_file.get_md5_of_small_file(absolute_path)
@@ -117,8 +117,6 @@ def search_and_insert_directory_files(src_path, dbw):
 
     print("begin scan and insert...")
 
-
-
     total_cnt = len(all_files)
     for idx, absolute_path in enumerate(all_files):
         print("%d/%d: %s" % (idx, total_cnt, absolute_path))
@@ -132,7 +130,7 @@ def search_and_insert_directory_files(src_path, dbw):
 
         download_time = common_file.get_file_crtime(absolute_path)
         file_size = common_file.getFileSize(absolute_path)
-        if file_size >= 100 * 1024 * 1024:
+        if file_size >= 1024 * 1024:
             file_md5 = common_file.get_md5_of_big_file_prev1m(absolute_path)
         else:
             file_md5 = common_file.get_md5_of_small_file(absolute_path)
@@ -314,10 +312,11 @@ def init_dbw():
 if __name__ == '__main__':
     dbw = init_dbw()
 
-    #search_and_insert_directory_files(search_dir1, dbw)
+    search_dir1 = "X:/"
+    search_and_insert_directory_files(search_dir1, dbw)
     #generate_json_file_by_search_directory_files(search_dir1, "./json_file.txt")
 
     #read_json_file_and_insert("./json_file_V.txt", dbw)
-    get_tag_of_videoes(dbw)
+    #get_tag_of_videoes(dbw)
 
 
